@@ -1,5 +1,6 @@
 /* Libraries */
-const babel = require('gulp-babel'),
+const audiosprite = require('gulp-audiosprite'),
+      babel = require('gulp-babel'),
       browserSync = require('browser-sync').create(),
       del = require('del'),
       gulp = require('gulp'),
@@ -20,18 +21,20 @@ const dev = './src',
         'devScssFiles': `${dev}/scss/**/*.scss`,
         'devHtmlFiles': `${dev}/html/**/*.html`,
         'devFontFiles': `${dev}/fonts/**/*`,
+        'devSoundFiles': `${dev}/sounds/**/*`,
         'devImageFiles': `${dev}/img/**/*`,
         'buildScssDirectory': `${build}/css/`,
         'buildJsDirectory': `${build}/js/`,
         'buildHtmlDirectory': build,
         'buildFontsFiles': `${build}/fonts`,
+        'buildSoundFiles': `${build}/sounds`,
         'buildImagesFiles': `${build}/img`
       };
 
 /* Gulp tasks */
 gulp.task('default', ['build', 'watch', 'serve'])
 
-gulp.task('build', ['scss', 'js', 'html', 'fonts', 'images'])
+gulp.task('build', ['scss', 'js', 'html', 'fonts', 'images', 'sounds'])
 
 gulp.task('watch', () => {
   gulp.watch(PATHS.devScssFiles, ['scss'])
@@ -86,6 +89,14 @@ gulp.task('images', () => {
     .pipe(imagemin())
     .pipe(gulp.dest(PATHS.buildImagesFiles))
 })
+
+gulp.task('sounds', () => {
+  gulp.src(PATHS.devSoundFiles)
+    .pipe(audiosprite({
+      format: 'howler'
+    }))
+    .pipe(gulp.dest(PATHS.buildSoundFiles));
+});
 
 gulp.task('clean', () => {
   return del([
