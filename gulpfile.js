@@ -1,6 +1,5 @@
 /* Libraries */
-const audiosprite = require('gulp-audiosprite'),
-      babel = require('gulp-babel'),
+const babel = require('gulp-babel'),
       browserSync = require('browser-sync').create(),
       del = require('del'),
       gulp = require('gulp'),
@@ -92,9 +91,6 @@ gulp.task('images', () => {
 
 gulp.task('sounds', () => {
   gulp.src(PATHS.devSoundFiles)
-    .pipe(audiosprite({
-      format: 'howler'
-    }))
     .pipe(gulp.dest(PATHS.buildSoundFiles));
 });
 
