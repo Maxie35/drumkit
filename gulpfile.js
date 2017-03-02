@@ -1,3 +1,4 @@
+/* Libraries */
 const babel = require('gulp-babel'),
       browserSync = require('browser-sync').create(),
       del = require('del'),
@@ -9,34 +10,36 @@ const babel = require('gulp-babel'),
       webpack = require('webpack'),
       webpackConfig = require('./webpack.config');
 
-// File paths are set here
+/* Path information */
 const dev = './src',
-      devJsFiles = `${dev}/js/**/*.js`,
-      devJsEntry = `${dev}/js/main.js`,
-      devScssEntry = `${dev}/scss/style.scss`,
-      devScssFiles = `${dev}/scss/**/*.scss`,
-      devHtmlFiles = `${dev}/html/**/*.html`,
-      devFontFiles = `${dev}/fonts/**/*`,
-      devImageFiles = `${dev}/img/**/*`,
-
       build = './build',
-      buildScssDirectory = `${build}/css/`,
-      buildJsDirectory = `${build}/js/`,
-      buildHtmlDirectory = build,
-      buildFontsFiles = `${build}/fonts`,
-      buildImagesFiles = `${build}/img`;
+      PATHS = {
+        'devJsFiles': `${dev}/js/**/*.js`,
+        'devJsEntry': `${dev}/js/main.js`,
+        'devScssEntry': `${dev}/scss/style.scss`,
+        'devScssFiles': `${dev}/scss/**/*.scss`,
+        'devHtmlFiles': `${dev}/html/**/*.html`,
+        'devFontFiles': `${dev}/fonts/**/*`,
+        'devImageFiles': `${dev}/img/**/*`,
+        'buildScssDirectory': `${build}/css/`,
+        'buildJsDirectory': `${build}/js/`,
+        'buildHtmlDirectory': build,
+        'buildFontsFiles': `${build}/fonts`,
+        'buildImagesFiles': `${build}/img`
+      };
 
+/* Gulp tasks */
 gulp.task('default', ['build', 'watch', 'serve'])
 
 gulp.task('build', ['scss', 'js', 'html', 'fonts', 'images'])
 
-gulp.task('watch', function () {
-  gulp.watch(devScssFiles, ['scss'])
-  gulp.watch(devJsFiles, ['js:watch'])
-  gulp.watch(devHtmlFiles, ['html:watch'])
+gulp.task('watch', () => {
+  gulp.watch(PATHS.devScssFiles, ['scss'])
+  gulp.watch(PATHS.devJsFiles, ['js:watch'])
+  gulp.watch(PATHS.devHtmlFiles, ['html:watch'])
 })
 
-gulp.task('serve', function () {
+gulp.task('serve', () => {
   browserSync.init({
     server: {
       baseDir: './build/',
@@ -45,46 +48,46 @@ gulp.task('serve', function () {
   })
 })
 
-gulp.task('scss', function () {
-  return gulp.src(devScssEntry)
+gulp.task('scss', () => {
+  return gulp.src(PATHS.devScssEntry)
     .pipe(sass().on('error', sass.logError))
-    .pipe(gulp.dest(buildScssDirectory))
+    .pipe(gulp.dest(PATHS.buildScssDirectory))
     .pipe(browserSync.stream())
 })
 
-gulp.task('js', function () {
-  return gulp.src(devJsEntry)
+gulp.task('js', () => {
+  return gulp.src(PATHS.devJsEntry)
     .pipe(webpackStream(webpackConfig, webpack))
-    .pipe(gulp.dest(buildJsDirectory))
+    .pipe(gulp.dest(PATHS.buildJsDirectory))
 })
 
-gulp.task('js:watch', ['js'], function (done) {
+gulp.task('js:watch', ['js'], (done) => {
   browserSync.reload()
   done()
 })
 
-gulp.task('html', function () {
-  gulp.src(devHtmlFiles)
-    .pipe(gulp.dest(buildHtmlDirectory))
+gulp.task('html', () => {
+  gulp.src(PATHS.devHtmlFiles)
+    .pipe(gulp.dest(PATHS.buildHtmlDirectory))
 })
 
-gulp.task('html:watch', ['html'], function (done) {
+gulp.task('html:watch', ['html'], (done) => {
   browserSync.reload()
   done()
 })
 
-gulp.task('fonts', function () {
-  gulp.src(devFontFiles)
-    .pipe(gulp.dest(buildFontsFiles))
+gulp.task('fonts', () => {
+  gulp.src(PATHS.devFontFiles)
+    .pipe(gulp.dest(PATHS.buildFontsFiles))
 })
 
-gulp.task('images', function () {
-  gulp.src(devImageFiles)
+gulp.task('images', () => {
+  gulp.src(PATHS.devImageFiles)
     .pipe(imagemin())
-    .pipe(gulp.dest(buildImagesFiles))
+    .pipe(gulp.dest(PATHS.buildImagesFiles))
 })
 
-gulp.task('clean', function () {
+gulp.task('clean', () => {
   return del([
     `${build}/**/*`
   ])
