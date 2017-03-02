@@ -4,8 +4,6 @@
   "description": "",
   "main": "main.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "nodemon src/index.js PORT=5000",
     "watch": "gulp clean && gulp",
     "build": "gulp clean && gulp build"
   },
